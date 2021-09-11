@@ -208,12 +208,12 @@ int main(int argc, char** argv) {
     }
     else if (cli::astCommand->parsed()) {
         // TODO: Hard-coded debugging test.
-        std::shared_ptr<ionir::Args> args = std::make_shared<ionir::Args>();
-        std::shared_ptr<ionir::VoidType> returnType = std::make_shared<ionir::VoidType>();
+        auto args = std::make_shared<ionir::Args>();
+        auto returnType = std::make_shared<ionir::TypeVoid>();
 
         // TODO: Module is nullptr.
-        std::shared_ptr<ionir::Prototype> prototype =
-            ionir::Prototype::make("foobar", args, returnType);
+        auto prototype =
+            std::make_shared<ionir::Prototype>("foobar", args, returnType);
 
         std::queue<std::shared_ptr<ionir::Construct>> childrenQueue{};
 

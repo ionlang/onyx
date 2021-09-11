@@ -1,4 +1,4 @@
-#include <ionshared/diagnostics/diagnostic.h>
+#include <ionshared/diagnostic.h>
 #include <ionshared/llvm/llvm_module.h>
 #include <ionir/passes/lowering/llvm_lowering_pass.h>
 #include <ionir/passes/type_system/type_check_pass.h>
