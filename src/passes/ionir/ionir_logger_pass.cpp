@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ilc/passes/ionir/ionir_logger_pass.h>
 #include <ilc/cli/log.h>
-#include <ionir/const/const.h>
+#include <ionir/const.h>
 
 namespace ilc {
     IonIrLoggerPass::IonIrLoggerPass(

@@ -4,9 +4,9 @@
 
 #include <string>
 #include <vector>
-#include <ionshared/diagnostics/diagnostic.h>
+#include <ionshared/diagnostic.h>
 #include <ionlang/lexical/token.h>
-#include <ilc/misc/helpers.h>
+#include <ilc/helpers.h>
 
 namespace ilc {
     struct CodeBlockLine {

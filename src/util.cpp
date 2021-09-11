@@ -1,4 +1,4 @@
-#include <ilc/misc/util.h>
+#include <ilc/util.h>
 
 namespace ilc::util {
     int execute(std::string command) {

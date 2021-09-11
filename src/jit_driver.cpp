@@ -1,18 +1,20 @@
+#include <memory>
+#include <vector>
 #include <ionshared/diagnostic.h>
 #include <ionshared/llvm/llvm_module.h>
-#include <ionir/passes/lowering/llvm_lowering_pass.h>
-#include <ionir/passes/type_system/type_check_pass.h>
-#include <ionir/passes/type_system/borrow_check_pass.h>
-#include <ionir/passes/semantic/entry_point_check_pass.h>
-#include <ionlang/passes/lowering/ionir_lowering_pass.h>
-#include <ionlang/passes/semantic/macro_expansion_pass.h>
-#include <ionlang/passes/semantic/name_resolution_pass.h>
+#include <ionir/passes/llvm_lowering_pass.h>
+#include <ionir/passes/type_check_pass.h>
+#include <ionir/passes/borrow_check_pass.h>
+#include <ionir/passes/entry_point_check_pass.h>
+#include <ionlang/passes/ionir_lowering_pass.h>
+#include <ionlang/passes/name_resolution_pass.h>
 #include <ionlang/lexical/lexer.h>
 #include <ionlang/syntax/parser.h>
+#include <ionlang/environment.h>
 #include <ilc/passes/ionlang/ionlang_logger_pass.h>
-#include <ilc/diagnostics/diagnostic_printer.h>
+#include <ilc/diagnostic_printer.h>
 #include <ilc/cli/log.h>
-#include <ilc/jit/jit_driver.h>
+#include <ilc/jit_driver.h>
 
 namespace ilc {
     std::vector<ionlang::Token> JitDriver::lex() {
@@ -34,7 +36,7 @@ namespace ilc {
         return tokens;
     }
 
-    ionshared::OptPtr<ionlang::Module> JitDriver::parse(
+    ionshared::OptPtr<ionlang::Namespace> JitDriver::parse(
         std::vector<ionlang::Token> tokens,
         std::shared_ptr<DiagnosticVector> diagnostics
     ) {
@@ -52,7 +54,7 @@ namespace ilc {
             std::cout << ConsoleColor::coat("--- Parser ---", ColorKind::ForegroundGreen)
                 << std::endl;
 
-            ionlang::AstPtrResult<ionlang::Module> moduleResult = parser.parseModule();
+            ionlang::AstPtrResult<ionlang::Namespace> moduleResult = parser.parseNamespace();
 
             // TODO: Improve if block?
             if (ionlang::util::hasValue(moduleResult)) {
@@ -86,7 +88,7 @@ namespace ilc {
     }
 
     void JitDriver::codegen(
-        std::shared_ptr<ionlang::Module> module,
+        std::shared_ptr<ionlang::Namespace> module,
         std::shared_ptr<DiagnosticVector> diagnostics
     ) {
         try {
@@ -101,7 +103,7 @@ namespace ilc {
              */
             ionlang::PassManager ionLangPassManager{};
 
-            std::shared_ptr<ionshared::PassContext> passContext =
+            auto passContext =
                 std::make_shared<ionshared::PassContext>(diagnostics);
 
             // Register all passes to be used by the pass manager.
@@ -111,11 +113,22 @@ namespace ilc {
             }
 
             if (cli::options.passes.contains(cli::PassKind::MacroExpansion)) {
-                ionLangPassManager.registerPass(std::make_shared<ionlang::MacroExpansionPass>(passContext));
+                // TODO: Implement.
+                throw std::runtime_error("Not implemented");
+                // ionLangPassManager.registerPass(std::make_shared<ionlang::MacroExpansionPass>(passContext));
             }
 
             if (cli::options.passes.contains(cli::PassKind::NameResolution)) {
-                ionLangPassManager.registerPass(std::make_shared<ionlang::NameResolutionPass>(passContext));
+                ionLangPassManager.registerPass(
+                    std::make_shared<ionlang::NameResolutionPass>(
+                        passContext,
+                        
+                        // TODO: Temporary?
+                        std::make_shared<ionlang::Environment>(
+                            std::vector<std::shared_ptr<ionlang::Namespace>>{module}
+                        )
+                    )
+                );
             }
 
             // Execute the pass manager against the parser's resulting AST.
@@ -126,7 +139,7 @@ namespace ilc {
 
             // TODO: What if multiple top-level constructs are defined in-line? Use ionir::Driver (finish it first) and use its resulting Ast. (Additional note above).
             // Visit the parsed module construct.
-            ionIrLoweringPass.visitModule(module);
+            ionIrLoweringPass.visitNamespace(module);
 
             // TODO: Verify a module exists/was emitted, before retrieving it.
 
@@ -145,15 +158,21 @@ namespace ilc {
 
             // Register passes.
             if (cli::options.passes.contains(cli::PassKind::EntryPointCheck)) {
-                ionirPassManager.registerPass(std::make_shared<ionir::EntryPointCheckPass>(passContext));
+                ionirPassManager.registerPass(
+                    std::make_shared<ionir::EntryPointCheckPass>(passContext)
+                );
             }
 
             if (cli::options.passes.contains(cli::PassKind::TypeChecking)) {
-                ionirPassManager.registerPass(std::make_shared<ionir::TypeCheckPass>(passContext));
+                ionirPassManager.registerPass(
+                    std::make_shared<ionir::TypeCheckPass>(passContext)
+                );
             }
 
             if (cli::options.passes.contains(cli::PassKind::BorrowCheck)) {
-                ionirPassManager.registerPass(std::make_shared<ionir::BorrowCheckPass>(passContext));
+                ionirPassManager.registerPass(
+                    std::make_shared<ionir::BorrowCheckPass>(passContext)
+                );
             }
 
             // Run the pass manager on the IonIR AST.
@@ -240,7 +259,7 @@ namespace ilc {
         std::shared_ptr<DiagnosticVector> diagnostics =
             std::make_shared<DiagnosticVector>();
 
-        ionshared::OptPtr<ionlang::Module> module = this->parse(tokens, diagnostics);
+        ionshared::OptPtr<ionlang::Namespace> module = this->parse(tokens, diagnostics);
 
         if (ionshared::util::hasValue(module)) {
             this->codegen(*module, diagnostics);

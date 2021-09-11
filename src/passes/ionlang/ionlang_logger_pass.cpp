@@ -1,4 +1,4 @@
-#include <ionlang/const/const.h>
+#include <ionlang/const.h>
 #include <ilc/passes/ionlang/ionlang_logger_pass.h>
 #include <ilc/cli/log.h>
 

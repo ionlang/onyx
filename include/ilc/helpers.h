@@ -3,7 +3,7 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <ionshared/diagnostics/diagnostic.h>
+#include <ionshared/diagnostic.h>
 #include <ionshared/container/vector.h>
 
 namespace ilc {

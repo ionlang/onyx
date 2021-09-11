@@ -9,7 +9,7 @@ code.
 * [ionlang](https://github.com/ionlang/ionlang)
 * [CMake](https://cmake.org/download/)
 * GCC `>=v10`
-* [LLVM](https://releases.llvm.org/download.html)¹ `=v9.0.0`
+* [LLVM](https://releases.llvm.org/download.html)¹ `=v12.0.1`
 
 ---
 1. _LLVM must be built from source on Windows. A different, close version of LLVM

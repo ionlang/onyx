@@ -1,6 +1,6 @@
 #include <ionlang/lexical/classifier.h>
 #include <ilc/cli/console_color.h>
-#include <ilc/diagnostics/code_highlight.h>
+#include <ilc/code_highlight.h>
 
 namespace ilc {
     std::string CodeHighlight::coat(ionlang::Token token) {

@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 #include <optional>
-#include <ilc/misc/helpers.h>
+#include <ilc/helpers.h>
 
 namespace ilc::jit {
     static ionshared::Map<std::string, Callback> actions =

@@ -1,4 +1,4 @@
-#include <ilc/processing/linker_finder.h>
+#include <ilc/linker_finder.h>
 
 namespace ilc {
     std::string LinkerFinder::findGcc() {

@@ -1,9 +1,9 @@
 #include <sstream>
-#include <ionlang/const/const_name.h>
-#include <ionlang/misc/util.h>
+#include <ionlang/const_name.h>
+#include <ionlang/util.h>
 #include <ilc/cli/log.h>
-#include <ilc/diagnostics/code_highlight.h>
-#include <ilc/diagnostics/diagnostic_printer.h>
+#include <ilc/code_highlight.h>
+#include <ilc/diagnostic_printer.h>
 
 #define ILC_DIAGNOSTICS_TAB "   "
 

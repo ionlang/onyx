@@ -1,8 +1,8 @@
 #include <ilc/cli/log.h>
-#include <ilc/processing/linker_invoker.h>
-#include <ilc/processing/linker_argument_builder.h>
-#include <ilc/processing/linker_finder.h>
-#include <ilc/misc/util.h>
+#include <ilc/linker_invoker.h>
+#include <ilc/linker_argument_builder.h>
+#include <ilc/linker_finder.h>
+#include <ilc/util.h>
 
 namespace ilc {
     LinkerInvoker::LinkerInvoker(

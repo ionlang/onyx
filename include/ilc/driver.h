@@ -4,10 +4,10 @@
 #include <vector>
 #include <llvm/ADT/Triple.h>
 #include <llvm/IR/Module.h>
-#include <ionshared/misc/helpers.h>
+#include <ionshared/helpers.h>
 #include <ionlang/lexical/token.h>
-#include <ionlang/construct/module.h>
-#include <ilc/misc/helpers.h>
+#include <ionlang/construct/namespace.h>
+#include <ilc/helpers.h>
 
 namespace ilc {
     class Driver {
@@ -20,13 +20,13 @@ namespace ilc {
 
         std::vector<ionlang::Token> lex();
 
-        ionshared::OptPtr<ionlang::Module> parse(
+        ionshared::OptPtr<ionlang::Namespace> parse(
             std::vector<ionlang::Token> tokens,
             std::shared_ptr<DiagnosticVector> diagnostics
         );
 
         std::optional<std::vector<llvm::Module*>> lowerToLlvmIr(
-            std::shared_ptr<ionlang::Module> module,
+            std::shared_ptr<ionlang::Namespace> module,
             std::shared_ptr<DiagnosticVector> diagnostics
         );
 

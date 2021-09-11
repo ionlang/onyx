@@ -16,6 +16,7 @@ namespace ilc {
             ionshared::OptPtr<std::stringstream> includeOutputStream = std::nullopt
         ) noexcept;
 
-        void visitDirective(ionir::Directive node) override;
+        // TODO
+        // void visitDirective(ionir::Directive node) override;
     };
 }

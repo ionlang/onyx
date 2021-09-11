@@ -1,7 +1,7 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <sstream>
-#include <ilc/misc/file_system.h>
+#include <ilc/file_system.h>
 
 namespace ilc {
     bool FileSystem::doesPathExist(const std::string& name) {
